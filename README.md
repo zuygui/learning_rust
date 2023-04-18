@@ -43,46 +43,6 @@ fib_recursive(18) = 2584
 fib_recursive(19) = 4181
 fib_recursive(20) = 6765
 --- ITERATIVE ---
---- END ---
-
- ~/Documents/learning_rust   LEVEL-1-Fibonacci-suite !1 ?5                                                               1.71.0-nightly  22:49:14 
-❯ cargo run
-   Compiling fibonnaci-suite v0.1.0 (/home/zuygui/Documents/learning_rust)
-warning: value assigned to `c` is never read
-  --> src/main.rs:16:13
-   |
-16 |     let mut c = 0;
-   |             ^
-   |
-   = help: maybe it is overwritten before being read?
-   = note: `#[warn(unused_assignments)]` on by default
-
-warning: `fibonnaci-suite` (bin "fibonnaci-suite") generated 1 warning
-    Finished dev [unoptimized + debuginfo] target(s) in 0.14s
-     Running `target/debug/fibonnaci-suite`
---- RECURSIVE ---
-fib_recursive(0) = 0
-fib_recursive(1) = 1
-fib_recursive(2) = 1
-fib_recursive(3) = 2
-fib_recursive(4) = 3
-fib_recursive(5) = 5
-fib_recursive(6) = 8
-fib_recursive(7) = 13
-fib_recursive(8) = 21
-fib_recursive(9) = 34
-fib_recursive(10) = 55
-fib_recursive(11) = 89
-fib_recursive(12) = 144
-fib_recursive(13) = 233
-fib_recursive(14) = 377
-fib_recursive(15) = 610
-fib_recursive(16) = 987
-fib_recursive(17) = 1597
-fib_recursive(18) = 2584
-fib_recursive(19) = 4181
-fib_recursive(20) = 6765
---- ITERATIVE ---
 fib_iterative(0) = 0
 fib_iterative(1) = 1
 fib_iterative(2) = 1
