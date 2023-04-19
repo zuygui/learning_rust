@@ -2,6 +2,7 @@
 
 The goal of this repository is up my Rust's level with exercices availables on internet.
 For each exercice, the subject is provided with.
+You can use it in others languages for practice or up your level. Any Credit is not required and my code may be the correction.
 
 ## List of exercices
 
