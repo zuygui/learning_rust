@@ -5,8 +5,6 @@ For each exercice, the subject is provided with.
 
 ## List of exercices
 
-DONE:
-
 - [x] [Fibonnaci's suite](https://github.com/zuygui/learning_rust/tree/LEVEL-1-Fibonacci-suite)
 - [x] [Linked List simple](https://github.com/zuygui/learning_rust/tree/LEVEL-2-Linked-list-simple)
-- [ ] [Linked list double](https://github.com/zuygui/learning_rust/tree/LEVEL-2-Linked-list-double)
+- [x] [Linked list double](https://github.com/zuygui/learning_rust/tree/LEVEL-2-Linked-list-double)
