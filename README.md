@@ -8,5 +8,5 @@ For each exercice, the subject is provided with.
 DONE:
 
 - [x] [Fibonnaci's suite](https://github.com/zuygui/learning_rust/tree/LEVEL-1-Fibonacci-suite)
-
-TODO:
+- [x] [Linked List simple](https://github.com/zuygui/learning_rust/tree/LEVEL-2-Linked-list-simple)
+- [ ] [Linked list double](https://github.com/zuygui/learning_rust/tree/LEVEL-2-Linked-list-double)
