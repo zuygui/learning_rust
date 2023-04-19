@@ -1,100 +1,191 @@
+use std::{cell::RefCell, rc::Rc};
 
-#[derive(Clone)]
-enum address {
-    address(Box<LinkedList>),
-    Nil,
+
+struct ListNode<T> {
+    item: T,
+    next: Link<T>,
+    prev: Link<T>,
+    token: Token,
 }
 
-#[derive(Clone)]
-struct LinkedList {
-    value: u32,
-    next: address
+impl<T> ListNode<T> {
+    fn new(item: T) -> Self {
+        Self {
+            item,
+            next: None,
+            prev: None,
+            token: Token::new(),
+        }
+    }
 }
 
-impl LinkedList {
-    fn append(&mut self, elem: u32) {
-        match self.next {
-            address::address(ref mut next_address) => {
-                next_address.append(elem);
-            }
-            address::Nil => {
-                let node = LinkedList {
-                    value: elem,
-                    next: address::Nil
-                };
-                self.next = address::address(Box::new(node))
-            }
+type Link<T> = Option<Rc<RefCell<ListNode<T>>>>;
+
+#[derive(Default)]
+pub struct LinkedList<T> {
+    head: Link<T>,
+    tail: Link<T>,
+    size: usize,
+}
+
+impl<T> LinkedList<T> {
+    pub fn new() -> Self {
+        Self {
+            head: None,
+            tail: None,
+            size: 0,
         }
     }
 
-    fn delete(&mut self, elem: u32) {
-        match self.next {
-            address::address(ref mut next_address) => {
-                if next_address.value == elem {
-                    println!("Deleting value {}", next_address.value);
-                    self.next = next_address.next.clone();
-                } else {
-                    next_address.delete(elem);
-                }
-            }
-            address::Nil => {
-                if self.value == elem {
-                    self.value = 0;
-                } else {
-                    println!("Element {} does not exist in the linked list", elem);
-                }
-            }
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+
+    pub fn len(&self) -> usize {
+        self.size
+    }
+
+    pub fn push(&mut self, item: T) {
+        let node = Rc::new(RefCell::new(ListNode::new(item)));
+        if let Some(prev_tail) = self.tail.take() {
+            prev_tail.borrow_mut().next = Some(Rc::clone(&node));
+            node.borrow_mut().prev = Some(prev_tail);
+            self.tail = Some(node);
+            self.size += 1;
+        } else {
+            self.head = Some(Rc::clone(&node));
+            self.tail = Some(node);
+            self.size = 1;
         }
     }
 
-    fn count(&self) -> u32 {
-        match self.next {
-            address::address(ref newaddress) => 1 + newaddress.count(),
-            address::Nil => 0,
-        }
-    }
-
-    fn list(&self) {
-            if self.value == 0 {
-                println!("The list is empty")
-            } else {
-                println!("{}", self.value);
-                match self.next {
-                    address::address(ref next_address) => next_address.list(),
-                    address::Nil => {}
+    pub fn pop(&mut self) -> Option<T> {
+        self.tail.take().map(|prev_tail| {
+            self.size -= 1;
+            match prev_tail.borrow_mut().prev.take() {
+                Some(node) => {
+                    node.borrow_mut().next = None;
+                    self.tail = Some(node);
+                }
+                None => {
+                    self.head.take();
                 }
             }
+            Rc::try_unwrap(prev_tail).ok().unwrap().into_inner().item
+        })
+    }
+}
+
+impl<T> Drop for LinkedList<T> {
+    fn drop(&mut self) {
+        while let Some(node) = self.head.take() {
+            let _ = node.borrow_mut().prev.take();
+            self.head = node.borrow_mut().next.take();
+        }
+        self.tail.take();
+    }
+}
+
+struct Token {}
+
+impl Token {
+    fn new() -> Self {
+        println!("CREATED");
+        Self {}
+    }
+}
+
+impl Drop for Token {
+    fn drop(&mut self) {
+        println!("DESTROYED");
+    }
+}
+
+impl<T> IntoIterator for LinkedList<T> {
+    type Item = <ListIterator<T> as Iterator>::Item;
+
+    type IntoIter = ListIterator<T>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        Self::IntoIter::new(self)
+    }
+}
+
+pub struct ListIterator<T> {
+    list: LinkedList<T>,
+}
+
+impl<T> ListIterator<T> {
+    fn new(list: LinkedList<T>) -> Self {
+        Self { list }
+    }
+}
+
+impl<T> Iterator for ListIterator<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.list.pop()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::LinkedList;
+
+    #[test]
+    fn it_works() {
+        let mut list: LinkedList<i8> = LinkedList::new();
+
+        assert_eq!(list.pop(), None);
+        assert_eq!(list.len(), 0);
+        assert!(list.is_empty());
+    }
+
+    #[test]
+    fn can_push() {
+        let mut list = LinkedList::new();
+        assert_eq!(list.pop(), None);
+
+        list.push(3);
+        list.push(4);
+        list.push(5);
+        assert_eq!(list.pop(), Some(5));
+
+        list.push(6);
+        list.push(7);
+        assert_eq!(list.pop(), Some(7));
+        assert_eq!(list.pop(), Some(6));
+        assert_eq!(list.pop(), Some(4));
+        assert_eq!(list.pop(), Some(3));
+
+        list.push(2);
+        assert_eq!(list.pop(), Some(2));
+        assert_eq!(list.pop(), None);
+        assert_eq!(list.len(), 0);
+    }
+
+    #[test]
+    fn it_drops_correctly() {
+        let mut list = LinkedList::new();
+        for i in 0..3 {
+            list.push(i);
         }
 
-        fn update(&mut self, index: u32, elem: u32) {
-        let mut i = 0;
-        let mut j = self;
-        if i == index {
-            j.value = elem;
+        drop(list);
+    }
+
+    #[test]
+    fn can_iterate_forward() {
+        let mut list = LinkedList::new();
+        for i in 0..10 {
+            list.push(i);
         }
-        while i < index {
-            // println!("{}", j.value);
-            match j.next {
-                address::address(ref mut next_address) => j = next_address,
-                address::Nil => {}
-            }
-            i = i + 1;
-        }
-        j.value = elem;
+
+        assert!(Iterator::eq(list.into_iter(), (0..10).rev()));
     }
 }
 
 fn main() {
-    let mut head = LinkedList {
-        value: 8,
-        next: address::Nil,
-    };
-    head.append(9);
-    head.append(10);
-    head.append(11);
-    head.list();
-    println!("The size of the list is {}", head.count());
-    head.update(4, 20);
-    head.update(0, 6);
-    head.list();
+    println!("Hello, world!");
 }
