@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "fibonnaci-suite"
+name = "linked-list"
 version = "0.1.0"

@@ -1,36 +1,100 @@
 
-fn fib_recursive(n: u32) -> u32 {
-    if n == 0 {
-        return 0;
-    } else if n == 1 {
-        return 1;
-    } else {
-        return fib_recursive(n - 1) + fib_recursive(n - 2);
-    }
+#[derive(Clone)]
+enum address {
+    address(Box<LinkedList>),
+    Nil,
 }
 
-// calculate the fibonacci number iteratively
-fn fib_iterative(n: u32) -> u32 {
-    let mut a = 0;
-    let mut b = 1;
-    let mut c = 0;
-    for _ in 0..n {
-        c = a + b;
-        a = b;
-        b = c;
+#[derive(Clone)]
+struct LinkedList {
+    value: u32,
+    next: address
+}
+
+impl LinkedList {
+    fn append(&mut self, elem: u32) {
+        match self.next {
+            address::address(ref mut next_address) => {
+                next_address.append(elem);
+            }
+            address::Nil => {
+                let node = LinkedList {
+                    value: elem,
+                    next: address::Nil
+                };
+                self.next = address::address(Box::new(node))
+            }
+        }
     }
-    return a;
+
+    fn delete(&mut self, elem: u32) {
+        match self.next {
+            address::address(ref mut next_address) => {
+                if next_address.value == elem {
+                    println!("Deleting value {}", next_address.value);
+                    self.next = next_address.next.clone();
+                } else {
+                    next_address.delete(elem);
+                }
+            }
+            address::Nil => {
+                if self.value == elem {
+                    self.value = 0;
+                } else {
+                    println!("Element {} does not exist in the linked list", elem);
+                }
+            }
+        }
+    }
+
+    fn count(&self) -> u32 {
+        match self.next {
+            address::address(ref newaddress) => 1 + newaddress.count(),
+            address::Nil => 0,
+        }
+    }
+
+    fn list(&self) {
+            if self.value == 0 {
+                println!("The list is empty")
+            } else {
+                println!("{}", self.value);
+                match self.next {
+                    address::address(ref next_address) => next_address.list(),
+                    address::Nil => {}
+                }
+            }
+        }
+
+        fn update(&mut self, index: u32, elem: u32) {
+        let mut i = 0;
+        let mut j = self;
+        if i == index {
+            j.value = elem;
+        }
+        while i < index {
+            // println!("{}", j.value);
+            match j.next {
+                address::address(ref mut next_address) => j = next_address,
+                address::Nil => {}
+            }
+            i = i + 1;
+        }
+        j.value = elem;
+    }
 }
 
 fn main() {
-    println!("--- RECURSIVE ---");
-    for i in 0..21 {
-        println!("fib_recursive({}) = {}", i, fib_recursive(i));
-    }
-    println!("--- ITERATIVE ---");
-    for i in 0..21 {
-        println!("fib_iterative({}) = {}", i, fib_iterative(i));
-    }
-    println!("--- END ---");
+    let mut head = LinkedList {
+        value: 8,
+        next: address::Nil,
+    };
+    head.append(9);
+    head.append(10);
+    head.append(11);
+    head.list();
+    println!("The size of the list is {}", head.count());
+    head.update(4, 20);
+    head.update(0, 6);
+    head.list();
 }
-
