@@ -8,4 +8,5 @@ You can use it in others languages for practice or up your level. Any Credit is 
 
 - [x] [Fibonnaci's suite](https://github.com/zuygui/learning_rust/tree/LEVEL-1-Fibonacci-suite)
 - [x] [Linked List simple](https://github.com/zuygui/learning_rust/tree/LEVEL-2-Linked-list-simple)
-- [x] [Linked list double](https://github.com/zuygui/learning_rust/tree/LEVEL-2-Linked-list-double)
+- [x] [Linked list double](https://github.com/zuygui/learning_rust/tree/LEVEL-3-Linked-list-double)
+- [x] [Hanoi Tower](https://github.com/zuygui/learning_rust/tree/LEVEL-4-hanoi-tower)
