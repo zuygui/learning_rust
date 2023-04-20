@@ -1,4 +1,4 @@
-# Fibonnaci suite
+# Hanoi Tower
 
 ## Logic of the exercice
 
@@ -11,7 +11,7 @@ This is a fun puzzle game where the objective is to move an entire stack of disk
 
 ## TODO
 
-Write an program for solve the Hanoi Tower problem in Rust.
+Write an program for solve the Hanoi Tower problem in Rust using recursivity and without.
 
 ## Utils resources
 
@@ -22,6 +22,7 @@ Write an program for solve the Hanoi Tower problem in Rust.
 Using 4 disk
 
 ```
+--- USING RECURSION ---
 Move disk from pole 1 to pole 3
 Move disk from pole 1 to pole 2
 Move disk from pole 3 to pole 2
@@ -37,4 +38,37 @@ Move disk from pole 3 to pole 2
 Move disk from pole 1 to pole 3
 Move disk from pole 1 to pole 2
 Move disk from pole 3 to pole 2
+--- USING ITERATION ---
+Move disk from pole 1 to pole 2
+Move disk from pole 1 to pole 3
+Move disk from pole 2 to pole 3
+Move disk from pole 1 to pole 2
+Move disk from pole 3 to pole 1
+Move disk from pole 3 to pole 2
+Move disk from pole 1 to pole 2
+Move disk from pole 1 to pole 3
+Move disk from pole 2 to pole 3
+Move disk from pole 2 to pole 1
+Move disk from pole 3 to pole 1
+Move disk from pole 2 to pole 3
+Move disk from pole 1 to pole 2
+Move disk from pole 1 to pole 3
+Move disk from pole 2 to pole 3
+Move disk from pole 1 to pole 2
+Move disk from pole 3 to pole 1
+Move disk from pole 3 to pole 2
+Move disk from pole 1 to pole 2
+Move disk from pole 3 to pole 1
+Move disk from pole 2 to pole 3
+Move disk from pole 2 to pole 1
+Move disk from pole 3 to pole 1
+Move disk from pole 3 to pole 2
+Move disk from pole 1 to pole 2
+Move disk from pole 1 to pole 3
+Move disk from pole 2 to pole 3
+Move disk from pole 1 to pole 2
+Move disk from pole 3 to pole 1
+Move disk from pole 3 to pole 2
+Move disk from pole 1 to pole 2
+--- END ---
 ```
